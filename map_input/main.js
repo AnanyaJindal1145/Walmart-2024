@@ -3,6 +3,7 @@ let isDrawing = false;
 let startX, startY;
 let currentRect;
 const shelves = [];
+const mapName = 'MyFloorMap';  // Define or prompt for a map name
 
 document.getElementById('svgUpload').addEventListener('change', function(event) {
     const file = event.target.files[0];
@@ -13,12 +14,10 @@ document.getElementById('svgUpload').addEventListener('change', function(event) 
             svgContainer.innerHTML = e.target.result;
             svgElement = svgContainer.querySelector('svg');
 
-            // Ensure the SVG is responsive
             svgElement.setAttribute('width', '100%');
             svgElement.setAttribute('height', '100%');
             svgElement.setAttribute('preserveAspectRatio', 'xMidYMid meet');
 
-            // Add event listener for drawing rectangles
             svgElement.addEventListener('mousedown', startDrawing);
             svgElement.addEventListener('mousemove', drawRectangle);
             svgElement.addEventListener('mouseup', finishDrawing);
@@ -59,15 +58,50 @@ function finishDrawing(event) {
     if (!isDrawing) return;
     isDrawing = false;
 
+    const number = prompt('Enter number for this rectangle:');
+    const itemName = prompt('Enter item name for this rectangle:');
+
     const rect = {
         x: parseFloat(currentRect.getAttribute('x')),
         y: parseFloat(currentRect.getAttribute('y')),
         width: parseFloat(currentRect.getAttribute('width')),
-        height: parseFloat(currentRect.getAttribute('height'))
+        height: parseFloat(currentRect.getAttribute('height')),
+        number: number,
+        itemName: itemName
     };
 
     shelves.push(rect);
+
+    // Add text element with item details
+    const textElement = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    textElement.setAttribute('class', 'shelf-text');
+    textElement.setAttribute('x', rect.x);
+    textElement.setAttribute('y', rect.y + 20); // Positioned below the rectangle
+    textElement.textContent = `Item Name: ${itemName}\nNumber: ${number}`;
+    svgElement.appendChild(textElement);
 }
+
+document.getElementById('saveShelves').addEventListener('click', function() {
+    const svgContent = new XMLSerializer().serializeToString(svgElement);
+    const dataToSend = { mapName: 'MyFloorMap', svgContent, shelves }; // Include mapName
+    
+    console.log('Data to send:', dataToSend); // Log the data being sent
+
+    fetch('/save-shelves', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataToSend),
+    }).then(response => response.json())
+    .then(data => {
+        console.log('Shelves saved:', data);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+});
+
 
 function getMousePosition(event) {
     const CTM = svgElement.getScreenCTM();
@@ -77,20 +111,4 @@ function getMousePosition(event) {
     };
 }
 
-// Save the shelves to the backend
-document.getElementById('saveShelves').addEventListener('click', function() {
-    console.log('Shelves:', shelves); // This is where you would send the data to the backend
-    fetch('/save-shelves', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ shelves }),
-    }).then(response => response.json())
-    .then(data => {
-        console.log('Shelves saved:', data);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
-});
+
