@@ -1,126 +1,124 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Draggable from 'react-draggable';
-import './App.css';
+// Import necessary modules
+import React, { useState, useRef } from 'react';
 
+// Define the React component
 const App = () => {
-    const [mapId, setMapId] = useState(null);
-    const [elements, setElements] = useState([]);
-    const [name, setName] = useState('');
-    const [selectedElementIndex, setSelectedElementIndex] = useState(null);
-    const [showContextMenu, setShowContextMenu] = useState(false);
-    const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
+    const [isDrawing, setIsDrawing] = useState(false);
+    const [currentRect, setCurrentRect] = useState(null);
+    const [shelves, setShelves] = useState([]);
+    const svgRef = useRef(null);
+    const mapName = 'MyFloorMap'; // Define or prompt for a map name
 
-    // Add new element to the map
-    const addElement = (type) => {
-        setElements([...elements, { type, x: 100, y: 100, width: 100, height: 100 }]);
-    };
-
-    // Handle drag events
-    const handleDrag = (index, e, data) => {
-        const newElements = [...elements];
-        newElements[index] = { ...newElements[index], x: data.x, y: data.y };
-        setElements(newElements);
-    };
-
-    // Handle resizing of elements
-    const handleResize = (index, e, data) => {
-        const newElements = [...elements];
-        newElements[index] = { ...newElements[index], width: data.size.width, height: data.size.height };
-        setElements(newElements);
-    };
-
-    // Save map to the backend
-    const saveMap = async () => {
-        try {
-            const response = await axios.post('http://localhost:5000/api/maps', { id: mapId, name, elements });
-            if (!mapId) {
-                setMapId(response.data.id);
-            }
-            alert('Map saved successfully!');
-        } catch (error) {
-            alert('Error saving map');
+    // Handle SVG file upload
+    const handleFileUpload = (event) => {
+        const file = event.target.files[0];
+        if (file && file.type === 'image/svg+xml') {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const svgContainer = svgRef.current;
+                svgContainer.innerHTML = e.target.result;
+                const svgElement = svgContainer.querySelector('svg');
+                svgElement.setAttribute('width', '100%');
+                svgElement.setAttribute('height', '100%');
+                svgElement.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+                svgElement.addEventListener('mousedown', startDrawing);
+                svgElement.addEventListener('mousemove', drawRectangle);
+                svgElement.addEventListener('mouseup', finishDrawing);
+            };
+            reader.readAsText(file);
         }
     };
 
-    // Load map from the backend
-    const loadMap = async (id) => {
-        try {
-            const response = await axios.get(`http://localhost:5000/api/maps/${id}`);
-            setName(response.data.name);
-            setElements(response.data.elements);
-            setMapId(id);
-        } catch (error) {
-            alert('Error loading map');
-        }
+    // Start drawing the rectangle
+    const startDrawing = (event) => {
+        setIsDrawing(true);
+        const point = getMousePosition(event);
+        const newRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        newRect.setAttribute('class', 'shelf-rect');
+        newRect.setAttribute('x', point.x);
+        newRect.setAttribute('y', point.y);
+        newRect.setAttribute('width', 0);
+        newRect.setAttribute('height', 0);
+        svgRef.current.appendChild(newRect);
+        setCurrentRect(newRect);
     };
 
-    // Show context menu
-    const handleContextMenu = (e, index) => {
-        e.preventDefault();
-        setSelectedElementIndex(index);
-        setContextMenuPosition({ x: e.pageX, y: e.pageY });
-        setShowContextMenu(true);
+    // Draw the rectangle as the mouse moves
+    const drawRectangle = (event) => {
+        if (!isDrawing || !currentRect) return;
+        const point = getMousePosition(event);
+        const width = point.x - parseFloat(currentRect.getAttribute('x'));
+        const height = point.y - parseFloat(currentRect.getAttribute('y'));
+        currentRect.setAttribute('width', Math.abs(width));
+        currentRect.setAttribute('height', Math.abs(height));
+        if (width < 0) currentRect.setAttribute('x', point.x);
+        if (height < 0) currentRect.setAttribute('y', point.y);
     };
 
-    // Delete selected element
-    const deleteElement = () => {
-        setElements(elements.filter((_, i) => i !== selectedElementIndex));
-        setShowContextMenu(false);
+    // Finish drawing the rectangle and prompt for details
+    const finishDrawing = (event) => {
+        if (!isDrawing || !currentRect) return;
+        setIsDrawing(false);
+        const number = prompt('Enter number for this rectangle:');
+        const itemName = prompt('Enter item name for this rectangle:');
+        const rectData = {
+            x: parseFloat(currentRect.getAttribute('x')),
+            y: parseFloat(currentRect.getAttribute('y')),
+            width: parseFloat(currentRect.getAttribute('width')),
+            height: parseFloat(currentRect.getAttribute('height')),
+            number: number,
+            itemName: itemName
+        };
+        setShelves([...shelves, rectData]);
+
+        // Add text element with item details
+        const textElement = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        textElement.setAttribute('class', 'shelf-text');
+        textElement.setAttribute('x', rectData.x);
+        textElement.setAttribute('y', rectData.y + 20); // Positioned below the rectangle
+        textElement.textContent = `Item Name: ${itemName}\nNumber: ${number}`;
+        svgRef.current.appendChild(textElement);
     };
 
-    useEffect(() => {
-        // Optionally load a default map
-        // loadMap('some-map-id');
-    }, []);
+    // Save the shelves data
+    const saveShelves = () => {
+        const svgContent = new XMLSerializer().serializeToString(svgRef.current.querySelector('svg'));
+        const dataToSend = { mapName, svgContent, shelves };
+        console.log('Data to send:', dataToSend);
+
+        fetch('http://localhost:3000/save-shelves', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dataToSend),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Shelves saved:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    };
+
+    // Get mouse position relative to the SVG
+    const getMousePosition = (event) => {
+        const svgElement = svgRef.current.querySelector('svg');
+        const CTM = svgElement.getScreenCTM();
+        return {
+            x: (event.clientX - CTM.e) / CTM.a,
+            y: (event.clientY - CTM.f) / CTM.d
+        };
+    };
 
     return (
-        <div className="app-container">
-            <h1>Store Map Designer</h1>
+        <div>
             <div className="controls">
-                <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Map Name"
-                />
-                <button className="btn" onClick={() => addElement('rectangle')}>Add Rectangle</button>
-                <button className="btn" onClick={() => addElement('circle')}>Add Circle</button>
-                <button className="btn" onClick={saveMap}>Save Map</button>
-                <button className="btn" onClick={() => loadMap(mapId)}>Load Map</button>
+                <input type="file" id="svgUpload" accept=".svg" onChange={handleFileUpload} />
+                <button id="saveShelves" onClick={saveShelves}>Save Shelves</button>
             </div>
-            <div
-                className="map-container"
-                onClick={() => setShowContextMenu(false)}
-            >
-                {elements.map((element, index) => (
-                    <Draggable
-                        key={index}
-                        onStop={(e, data) => handleDrag(index, e, data)}
-                        position={{ x: element.x, y: element.y }}
-                        onContextMenu={(e) => handleContextMenu(e, index)}
-                    >
-                        <div
-                            style={{
-                                width: element.width,
-                                height: element.height,
-                                backgroundColor: element.type === 'rectangle' ? 'blue' : 'red',
-                                borderRadius: element.type === 'circle' ? '50%' : '0',
-                                cursor: 'move',
-                            }}
-                            className="map-element"
-                        />
-                    </Draggable>
-                ))}
-                {showContextMenu && (
-                    <div
-                        className="context-menu"
-                        style={{ top: contextMenuPosition.y, left: contextMenuPosition.x }}
-                    >
-                        <button onClick={deleteElement}>Delete</button>
-                    </div>
-                )}
-            </div>
+            <div id="svgContainer" ref={svgRef}></div>
         </div>
     );
 };
