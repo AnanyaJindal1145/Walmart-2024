@@ -6,7 +6,9 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const app = express();
-app.use(bodyParser.json());
+const cors = require('cors');
+app.use(cors());
+app.use(bodyParser.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 const mongoURI = process.env.MONGO_URI;

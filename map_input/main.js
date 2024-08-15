@@ -82,12 +82,12 @@ function finishDrawing(event) {
 }
 
 document.getElementById('saveShelves').addEventListener('click', function() {
-    const svgContent = new XMLSerializer().serializeToString(svgElement);
+    const svgContent = '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect x="10" y="10" width="30" height="30" stroke="black" fill="red" /></svg>';
     const dataToSend = { mapName: 'MyFloorMap', svgContent, shelves }; // Include mapName
     
     console.log('Data to send:', dataToSend); // Log the data being sent
 
-    fetch('/save-shelves', {
+    fetch('http://localhost:3000/save-shelves', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
