@@ -101,7 +101,7 @@ document.getElementById('saveShelves').addEventListener('click', function() {
         console.error('Error:', error);
     });
 });
-
+//random comment
 
 function getMousePosition(event) {
     const CTM = svgElement.getScreenCTM();
