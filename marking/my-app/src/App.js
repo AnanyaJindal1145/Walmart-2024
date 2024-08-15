@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
@@ -18,21 +17,18 @@ function App() {
       });
   }, []);
 
-  // Define box positions (x, y) based on your design
-  const boxPositions = {
-    1: { top: '100px', left: '100px' },
-    2: { top: '200px', left: '150px' },
-    3: { top: '300px', left: '200px' },
-    4: { top: '150px', left: '300px' }
-  };
-
   const handleChange = (event) => {
     setSelectedItem(event.target.value);
   };
 
   const getMarkerPosition = () => {
-    const boxNumber = items[selectedItem];
-    return boxPositions[boxNumber] || { top: '0px', left: '0px' };
+    const item = items[selectedItem];
+    return item ? {
+      top: `${item.y}px`,
+      left: `${item.x}px`,
+      width: `${item.width}px`,
+      height: `${item.height}px`,
+    } : { top: '0px', left: '0px', width: '0px', height: '0px' };
   };
 
   return (
@@ -43,26 +39,30 @@ function App() {
           <option value="">Select an item</option>
           {Object.keys(items).map(itemId => (
             <option key={itemId} value={itemId}>
-              Item {items[itemId]}
+              {itemId}
             </option>
           ))}
         </select>
       </header>
       <div className="store-map">
-        {Object.entries(items).map(([itemId, boxNumber]) => {
-          const position = boxPositions[boxNumber];
-          return (
-            position && (
-              <div key={itemId} className="box" style={{ top: position.top, left: position.left }}>
-                <div className="box-number">{boxNumber}</div>
-              </div>
-            )
-          );
-        })}
+        {Object.entries(items).map(([itemId, item]) => (
+          <div
+            key={itemId}
+            className="box"
+            style={{
+              top: `${item.y}px`,
+              left: `${item.x}px`,
+              width: `${item.width}px`,
+              height: `${item.height}px`,
+            }}
+          >
+            <div className="box-number">{item.number}</div>
+          </div>
+        ))}
         {selectedItem && (
           <div
             className="marker"
-            style={{ top: getMarkerPosition().top, left: getMarkerPosition().left }}
+            style={getMarkerPosition()}
           >
             <div className="marker-text">Selected Item</div>
           </div>
@@ -73,8 +73,6 @@ function App() {
 }
 
 export default App;
-
-
 
 /*
 import React, { useEffect, useState } from 'react';
