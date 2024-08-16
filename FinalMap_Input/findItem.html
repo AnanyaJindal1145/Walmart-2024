@@ -15,18 +15,19 @@
         </ul>
     </nav>
 
-    <div class="App">
-        <header class="App-header">
-            <h1>Virtual Store Map</h1>
-            <select id="itemSelect">
-                <option value="">Select an item</option>
-            </select>
-        </header>
-        <div class="store-map" id="storeMap">
-            <!-- Boxes and markers will be dynamically inserted here -->
+    <section id="find-item">
+        <h2>Find an Item on the Map</h2>
+        <select id="itemSelect">
+            <option value="">Select an item</option>
+        </select>
+
+        <div id="mapContainer">
+            <img src="images/floorplan1.svg" id="floorMap" alt="Floor Map">
+            <div id="itemMarker" class="marker"></div>
         </div>
-    </div>
+    </section>
 
     <script src="js/findItem.js"></script>
 </body>
 </html>
+

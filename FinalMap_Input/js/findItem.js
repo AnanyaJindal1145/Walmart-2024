@@ -1,68 +1,50 @@
-document.addEventListener('DOMContentLoaded', function() {
+
+document.addEventListener('DOMContentLoaded', function () {
     const itemSelect = document.getElementById('itemSelect');
-    const storeMap = document.getElementById('storeMap');
-    let items = {};
+    const itemMarker = document.getElementById('itemMarker');
+
+    // Define offset values (adjust these values as needed)
+    const xOffset = -4; // Adjust this for horizontal alignment
+    const yOffset = 106; // Adjust this for vertical alignment
 
     // Fetch item data from the server
     fetch('http://localhost:8000/items')
         .then(response => response.json())
         .then(data => {
-            items = data;
-            populateSelectBox();
-            renderStoreMap();
+            // Populate the select dropdown with items
+            for (const itemName in data) {
+                const option = document.createElement('option');
+                option.value = itemName;
+                option.textContent = itemName;
+                itemSelect.appendChild(option);
+            }
+
+            // Render boxes on the map
+            for (const itemName in data) {
+                const item = data[itemName];
+                const box = document.createElement('div');
+                box.classList.add('box');
+                box.style.top = `${item.y + yOffset}px`;
+                box.style.left = `${item.x + xOffset}px`;
+                box.style.width = `${item.width}px`;
+                box.style.height = `${item.height}px`;
+                box.innerHTML = `<div class="box-number">${item.number}</div>`;
+                document.getElementById('mapContainer').appendChild(box);
+            }
+
+            itemSelect.addEventListener('change', function () {
+                const selectedItem = data[this.value];
+                if (selectedItem) {
+                    itemMarker.style.top = `${selectedItem.y + yOffset}px`;
+                    itemMarker.style.left = `${selectedItem.x + xOffset}px`;
+                    itemMarker.style.width = `${selectedItem.width}px`;
+                    itemMarker.style.height = `${selectedItem.height}px`;
+                    itemMarker.textContent = this.value;
+                    itemMarker.classList.add('visible');
+                } else {
+                    itemMarker.classList.remove('visible');
+                }
+            });
         })
-        .catch(error => {
-            console.error('Error fetching items:', error);
-        });
-
-    itemSelect.addEventListener('change', function() {
-        renderStoreMap();
-    });
-
-    function populateSelectBox() {
-        for (const itemId in items) {
-            const option = document.createElement('option');
-            option.value = itemId;
-            option.textContent = itemId;
-            itemSelect.appendChild(option);
-        }
-    }
-
-    function renderStoreMap() {
-        storeMap.innerHTML = ''; // Clear the map
-
-        for (const [itemId, item] of Object.entries(items)) {
-            const box = document.createElement('div');
-            box.classList.add('box');
-            box.style.top = `${item.y}px`;
-            box.style.left = `${item.x}px`;
-            box.style.width = `${item.width}px`;
-            box.style.height = `${item.height}px`;
-
-            const boxNumber = document.createElement('div');
-            boxNumber.classList.add('box-number');
-            boxNumber.textContent = item.number;
-
-            box.appendChild(boxNumber);
-            storeMap.appendChild(box);
-        }
-
-        const selectedItem = itemSelect.value;
-        if (selectedItem) {
-            const marker = document.createElement('div');
-            marker.classList.add('marker');
-            const item = items[selectedItem];
-            marker.style.top = `${item.y}px`;
-            marker.style.left = `${item.x}px`;
-            marker.style.width = `${item.width}px`;
-            marker.style.height = `${item.height}px`;
-
-            const markerText = document.createElement('div');
-            markerText.classList.add('marker-text');
-            markerText.textContent = 'Selected Item';
-
-            marker.appendChild(markerText);
-            storeMap.appendChild(marker);
-        }
-    }
+        .catch(error => console.error('Error fetching items:', error));
 });
