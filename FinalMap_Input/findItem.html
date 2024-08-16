@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Find Item</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="addedcss.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -75,21 +76,20 @@
     </style>
 </head>
 <body>
-    <nav>
-        <ul>
+    <header>
+        <ul class="navbarr" style="margin-left: 30%;">
             <li><a href="index.html">Home</a></li>
             <li><a href="mapDesigner.html">Create Map Design</a></li>
             <li><a href="findItem.html">Find Item</a></li>
         </ul>
-    </nav>
-
-    <section id="find-item">
+    </header>
+    <section id="find-item" style="background-color: white; margin-top: 100px;">
         <h2>Find an Item on the Map</h2>
         <select id="itemSelect">
             <option value="">Select an item</option>
         </select>
 
-        <div id="mapContainer">
+        <div id="mapContainer" style="background-color: white;">
             <img src="images/floorplan1.svg" id="floorMap" alt="Floor Map">
             <div id="itemMarker" class="marker"></div>
         </div>
