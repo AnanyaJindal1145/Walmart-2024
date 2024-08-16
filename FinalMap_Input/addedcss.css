@@ -460,7 +460,7 @@ section {
     text-align: justify; /* Justify text for a clean look */
     margin: 0 0 20px; /* Add space below the paragraph */
     padding: 0 10px;
-    padding-right: 10%;
+    /* padding-right: 10%; */
     font-size: 25px;
   }
   
