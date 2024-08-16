@@ -5,6 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Find Item</title>
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        nav {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #f4f4f4;
+        }
+
+        #find-item {
+            text-align: center;
+            padding: 20px;
+        }
+
+        #find-item h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        #itemSelect {
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #fff;
+            color: #333;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        #itemSelect:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
+            outline: none;
+        }
+    </style>
 </head>
 <body>
     <nav>
@@ -15,18 +83,21 @@
         </ul>
     </nav>
 
-    <div class="App">
-        <header class="App-header">
-            <h1>Virtual Store Map</h1>
-            <select id="itemSelect">
-                <option value="">Select an item</option>
-            </select>
-        </header>
-        <div class="store-map" id="storeMap">
-            <!-- Boxes and markers will be dynamically inserted here -->
+    <section id="find-item">
+        <h2>Find an Item on the Map</h2>
+        <select id="itemSelect">
+            <option value="">Select an item</option>
+        </select>
+
+        <div id="mapContainer">
+            <img src="images/floorplan1.svg" id="floorMap" alt="Floor Map">
+            <div id="itemMarker" class="marker"></div>
         </div>
-    </div>
+    </section>
 
     <script src="js/findItem.js"></script>
 </body>
 </html>
+
+
+
