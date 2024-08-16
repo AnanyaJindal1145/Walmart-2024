@@ -14,15 +14,15 @@
    ```bash
    git clone https://github.com/yourusername/Walmart-2024.git
 2. **Navigate to the Project Directory**:
-   bash
+   ```bash
    Copy code
    cd your-project
 3. **Install Dependencies**:
-   bash
+   ```bash
    Copy code
    npm install
 4. **Start the Backend Server**:
-   bash
+   ```bash
    Copy code
    node server.js
 5. **Open the Application**:
@@ -35,8 +35,8 @@
 
 ## Technologies Used
 
--**Frontend**: HTML, CSS, JavaScript
--**Backend**: Node.js, Express, MongoDB
--**APIs**: Geolocation API for tracking item positions (future implementation)   
+- **Frontend**: HTML, CSS, JavaScript.
+- **Backend**: Node.js, Express, MongoDB.
+- **APIs**: Geolocation API for tracking item positions (future implementation).  
    
    
