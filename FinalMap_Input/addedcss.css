@@ -452,3 +452,16 @@ section {
 	}
 
 }
+
+#about p {
+    font-size: 18px; /* Adjust the font size */
+    line-height: 1.6; /* Increase line height for better readability */
+    color: #444; /* Slightly lighter color for the text */
+    text-align: justify; /* Justify text for a clean look */
+    margin: 0 0 20px; /* Add space below the paragraph */
+    padding: 0 10px;
+    padding-right: 10%;
+    font-size: 25px;
+  }
+  
+  
