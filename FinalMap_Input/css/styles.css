@@ -50,13 +50,33 @@ nav ul li a:hover {
 .hero h1, .hero p {
     position: relative;
     z-index: 2; /* Ensure text is above the overlay */
+    margin: 0;
+    padding: 0;
+}
+
+.hero h1 {
+    font-size: 4rem; /* Larger font size for the main heading */
+    font-weight: bold;
+    margin-bottom: 1rem; /* Spacing below the heading */
+}
+
+.hero p {
+    font-size: 1.25rem; /* Adjusted font size */
+    font-weight: 300;
+    line-height: 1.6; /* Improved line spacing for readability */
+    max-width: 600px; /* Constrain paragraph width */
+}
+
+.hero p + p {
+    margin-top: 0.5rem; /* Spacing between paragraphs */
 }
 
 .hero {
-    text-align: center;
-    background-image: url("C:/Users/hp/Documents/GitHub/Walmart-2024/FinalMap_Input/images/img1.jpg");
-    background-size: cover;
-    background-position: center;
+    margin-left: 10%;
+    text-align: left;
+    background-image: url("../images/img3.png");
+    background-size: contain;
+    background-position:right;
     background-repeat: no-repeat;
     height: 90vh; /* Full viewport height */
     display: flex;
@@ -64,7 +84,10 @@ nav ul li a:hover {
     justify-content: center; /* Center content vertically */
     color: white; /* Text color for visibility */
 }
-
+/* .hero p{
+    font-size: 25px;
+    font-weight: 300;
+} */
 /*
 .space {
     background-color: #f4f4f4; 
@@ -72,32 +95,33 @@ nav ul li a:hover {
 }
 */
 
+/*
 .buttons {
-    background-color: #333; /* Dark grey background for the button section */
-    padding: 0; /* Remove padding for Flexbox centering */
-    height: 200px; /* Fixed height for the button section */
-    display: flex; /* Use Flexbox for alignment */
-    align-items: center; /* Vertically center items within the section */
-    justify-content: center; /* Horizontally center items within the section */
+    background-color: #333;
+    padding: 0; 
+    height: 200px; 
+    display: flex;
+    align-items: center; 
+    justify-content: center;
     margin: 50px 0px 50px 0px;
     padding-right: 50px;
 }
 
 .buttons button {
-    background-color: #fff; /* White background for buttons */
-    color: #000; /* Black text */
+    background-color: #fff;
+    color: #000;
     border: none;
-    padding: 10px 20px; /* Adjust padding for button height */
-    margin: 0 20px; /* Space between buttons (increased for better centering) */
+    padding: 10px 20px;
+    margin: 0 20px;
     cursor: pointer;
     font-size: 16px;
     text-decoration: none;
 }
 
 .buttons button:hover {
-    background-color: #f4f4f4; /* Light grey for hover effect */
+    background-color: #f4f4f4;
 }
-
+/*/
 
 
 .about {
