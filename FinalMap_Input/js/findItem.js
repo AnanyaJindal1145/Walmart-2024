@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const itemMarker = document.getElementById('itemMarker');
 
     // Define offset values (adjust these values as needed)
-    const xOffset = -4; // Adjust this for horizontal alignment
-    const yOffset = 106; // Adjust this for vertical alignment
+    const xOffset = 435; // Adjust this for horizontal alignment
+    const yOffset = 190; // Adjust this for vertical alignment
 
     // Fetch item data from the server
     fetch('http://localhost:8000/items')
