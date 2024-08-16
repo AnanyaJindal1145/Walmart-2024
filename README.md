@@ -23,11 +23,11 @@
    ```bash
    node server.js
 5. **Open the Application**:
-   Visit http://localhost:3000 in your browser.
+   Right click on index.html file and click on live server
 
 ## Glimpses
 ![image](https://github.com/user-attachments/assets/ea36fa43-9c5e-4b64-beba-ec3287bafc2a)
-![image](https://github.com/user-attachments/assets/5f90143f-3d08-4009-9c5b-0a219ae7d541)
+![image](https://github.com/user-attachments/assets/d715d67b-8a31-4f23-b04f-89e33083cb0f)
 
 
 ## Technologies Used
