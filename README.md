@@ -15,7 +15,7 @@
    git clone https://github.com/yourusername/Walmart-2024.git
 2. **Navigate to the Project Directory**:
    ```bash
-   cd your-project
+   cd Final_map_input
 3. **Install Dependencies**:
    ```bash
    npm install
