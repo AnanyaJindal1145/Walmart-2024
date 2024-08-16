@@ -2,20 +2,19 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const path = require('path');
+const cors = require('cors');
 const dotenv = require('dotenv');
 dotenv.config();
 
 const app = express();
-const cors = require('cors');
-app.use(cors());
-app.use(bodyParser.json({ limit: '10mb' }));
-app.use(express.static(path.join(__dirname, 'public')));
+const port = 8000;
 
-const mongoURI = process.env.MONGO_URI;
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+// MongoDB connection setup
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.error('MongoDB connection error:', err));
 
+// Define the schema and model for items
 const ShelfSchema = new mongoose.Schema({
     x: Number,
     y: Number,
@@ -33,8 +32,12 @@ const MapSchema = new mongoose.Schema({
 
 const Map = mongoose.model('Map', MapSchema);
 
+app.use(cors());
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Endpoint to save shelves
 app.post('/save-shelves', async (req, res) => {
-    console.log('Received data:', req.body); // Log received data
     const { mapName, svgContent, shelves } = req.body;
 
     if (!mapName || !svgContent || !Array.isArray(shelves)) {
@@ -49,11 +52,38 @@ app.post('/save-shelves', async (req, res) => {
         );
         res.json({ message: 'Map and shelves saved successfully', map });
     } catch (error) {
-        console.error('Error saving data:', error); // Log any errors
         res.status(500).json({ message: 'Error saving data', error });
     }
 });
 
-app.listen(3000, () => {
-    console.log('Server is running on http://localhost:3000');
+// Endpoint to get item coordinates and dimensions from MongoDB
+app.get('/items', async (req, res) => {
+    try {
+        const map = await Map.findOne({ name: 'MyFloorMap' });
+
+        if (!map) {
+            return res.status(404).json({ message: 'Map not found' });
+        }
+
+        // Extract item details from the shelves
+        const itemDetails = map.shelves.reduce((acc, shelf) => {
+            acc[shelf.itemName] = {
+                x: shelf.x,
+                y: shelf.y,
+                width: shelf.width,
+                height: shelf.height,
+                number: shelf.number
+            };
+            return acc;
+        }, {});
+
+        res.json(itemDetails);
+    } catch (error) {
+        res.status(500).json({ message: 'Error retrieving items from database', error });
+    }
+});
+
+// Start the server
+app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}`);
 });
