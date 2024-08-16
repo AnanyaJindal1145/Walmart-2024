@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Define offset values (adjust these values as needed)
     const xOffset = 435; // Adjust this for horizontal alignment
-    const yOffset = 190; // Adjust this for vertical alignment
+    const yOffset = 235; // Adjust this for vertical alignment
 
     // Fetch item data from the server
     fetch('http://localhost:8000/items')

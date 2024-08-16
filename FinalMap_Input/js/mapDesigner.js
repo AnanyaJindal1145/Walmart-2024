@@ -87,7 +87,7 @@ document.getElementById('saveShelves').addEventListener('click', function() {
     
     console.log('Data to send:', dataToSend); // Log the data being sent
 
-    fetch('http://localhost:3000/save-shelves', {
+    fetch('http://localhost:8000/save-shelves', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
