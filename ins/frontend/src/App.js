@@ -15,10 +15,8 @@ function App() {
       .catch(error => {
         console.error('Error fetching access points:', error);
       });
-  }, []);
 
-  const estimatePosition = () => {
-    // Simulated Wi-Fi data (replace with actual data)
+    // Example Wi-Fi data; replace with real data collection logic
     const wifiData = [
       { ssid: 'AP1', rssi: -50 },
       { ssid: 'AP2', rssi: -60 },
@@ -32,17 +30,12 @@ function App() {
       .catch(error => {
         console.error('Error estimating position:', error);
       });
-  };
-
-  useEffect(() => {
-    estimatePosition();
   }, []);
 
   return (
     <div className="App">
       <h1>Indoor Navigation System</h1>
       <svg width="800" height="600" className="store-map">
-        {/* Display Wi-Fi access points */}
         {accessPoints.map(ap => (
           <g key={ap.ssid}>
             <circle cx={ap.x} cy={ap.y} r="5" fill="blue" />
@@ -50,7 +43,6 @@ function App() {
           </g>
         ))}
 
-        {/* Display the user's estimated position */}
         {userPosition && (
           <circle cx={userPosition.x} cy={userPosition.y} r="10" fill="red" />
         )}
