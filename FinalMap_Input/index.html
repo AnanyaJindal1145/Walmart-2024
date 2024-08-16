@@ -10,35 +10,39 @@
     <header>
         <nav>
             <ul>
-                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html">Home</a></li>  
                 <li><a href="#about">About Us</a></li>
             </ul>
         </nav>
     </header>
 
-    <main>
-        <section id="hero">
+    <main >
+        <div class="hero">
             <h1>Welcome to Our Indoor Positioning System</h1>
             <p>Design your map and find items with ease.</p>
-            <img src="images/hero-image.jpg" alt="Hero Image">
-        </section>
+        </div>
 
-        <section id="buttons">
+        <div class="buttons">
             <button onclick="window.location.href='mapDesigner.html'">Create Map Design</button>
             <button onclick="window.location.href='findItem.html'">Find Item</button>
-        </section>
+        </div>
 
-        <section id="about">
+        <div class="about" id="about">
             <h2>About Us</h2>
             <p>We provide solutions for indoor positioning and map design.</p>
-            <img src="images/about-image.jpg" alt="About Us Image">
-        </section>
+        </div>
     </main>
 
     <footer>
         <p>&copy; 2024 Indoor Positioning System. All rights reserved.</p>
     </footer>
 
-    <script src="js/main.js"></script>
+    <script>
+        // Optional: Add smooth scrolling behavior for browsers that don't support CSS smooth scrolling
+        document.querySelector('nav ul li a[href="#about"]').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
 </body>
 </html>

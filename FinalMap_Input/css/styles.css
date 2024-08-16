@@ -2,13 +2,16 @@ body, html {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: white;
     height: 100%;
+    min-height: 100vh; /* Ensure body takes full viewport height */
+    position: relative; /* Required for footer positioning */
 }
 
 header {
-    background-color: #333;
+    background-color: #000;
     color: #fff;
+    padding: 20px 0;
 }
 
 nav ul {
@@ -29,46 +32,79 @@ nav ul li a {
     font-weight: bold;
 }
 
-#hero {
+nav ul li a:hover {
+    color: #ddd;
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    height: 90vh;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+    z-index: 1; /* Overlay behind the content */
+}
+
+.hero h1, .hero p {
+    position: relative;
+    z-index: 2; /* Ensure text is above the overlay */
+}
+
+.hero {
     text-align: center;
-    padding: 50px 20px;
-    background: #fff;
+    background-image: url("C:/Users/hp/Documents/GitHub/Walmart-2024/FinalMap_Input/images/img1.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 90vh; /* Full viewport height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically */
+    color: white; /* Text color for visibility */
 }
 
-#hero img {
-    max-width: 100%;
-    height: auto;
+/*
+.space {
+    background-color: #f4f4f4; 
+    height: 40px; 
+}
+*/
+
+.buttons {
+    background-color: #333; /* Dark grey background for the button section */
+    padding: 0; /* Remove padding for Flexbox centering */
+    height: 200px; /* Fixed height for the button section */
+    display: flex; /* Use Flexbox for alignment */
+    align-items: center; /* Vertically center items within the section */
+    justify-content: center; /* Horizontally center items within the section */
+    margin: 50px 0px 50px 0px;
+    padding-right: 50px;
 }
 
-#buttons {
-    text-align: center;
-    margin: 20px 0;
-}
-
-#buttons button {
-    background-color: #007bff;
-    color: #fff;
+.buttons button {
+    background-color: #fff; /* White background for buttons */
+    color: #000; /* Black text */
     border: none;
-    padding: 10px 20px;
-    margin: 0 10px;
+    padding: 10px 20px; /* Adjust padding for button height */
+    margin: 0 20px; /* Space between buttons (increased for better centering) */
     cursor: pointer;
     font-size: 16px;
-    border-radius: 5px;
+    text-decoration: none;
 }
 
-#buttons button:hover {
-    background-color: #0056b3;
+.buttons button:hover {
+    background-color: #f4f4f4; /* Light grey for hover effect */
 }
 
-#about {
-    padding: 20px;
-    background: #fff;
+
+
+.about {
+    padding: 50px 20px;
+    background-color: #f4f4f4; /* Light grey for hover effect */
     text-align: center;
-}
-
-#about img {
-    max-width: 100%;
-    height: auto;
+    color: #333;
 }
 
 footer {
@@ -76,9 +112,21 @@ footer {
     color: #fff;
     text-align: center;
     padding: 10px;
-    position: fixed;
+    position: absolute; /* Position footer absolutely */
+    bottom: 0; /* Align it to the bottom of the container */
     width: 100%;
+    height: 10vh;
+    background: #333;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    position: relative;
     bottom: 0;
+    width: 100%;
 }
 
 .controls {
